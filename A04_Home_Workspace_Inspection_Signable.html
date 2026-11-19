@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A04 Home Workspace Inspection Checklist</title>
+<style>
+:root{--navy:#1B3A5C;--teal:#2E7D8C;--pale:#D6E8ED;--grey:#F2F2F2;--line:#C9D3DC;--ink:#1A1A1A}
+*{box-sizing:border-box}
+body{margin:0;background:#E9EEF2;font-family:Aptos,"Segoe UI",Calibri,Arial,sans-serif;color:var(--ink);font-size:13px}
+.toolbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff;display:flex;gap:10px;align-items:center;padding:10px 18px;flex-wrap:wrap}
+.toolbar .t{font-weight:700;margin-right:auto}
+.toolbar button,.btn{background:#fff;color:var(--navy);border:0;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:13px}
+.toolbar button.pri{background:var(--teal);color:#fff}
+.toolbar label{font-size:12px;display:flex;gap:6px;align-items:center}
+.page{max-width:900px;margin:22px auto;background:#fff;padding:34px 38px;box-shadow:0 2px 14px rgba(0,0,0,.12)}
+.title{background:var(--pale);color:var(--navy);text-align:center;padding:12px;font-size:20px;font-weight:800;letter-spacing:.5px}
+.sub{text-align:center;color:#555;font-size:11.5px;margin:6px 0 16px}
+.hgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 12px;margin-bottom:16px}
+.hf label{display:block;background:var(--navy);color:#fff;font-weight:700;font-size:11px;padding:4px 7px}
+.hf input,.hf select{width:100%;border:1px solid var(--line);border-top:0;padding:6px 7px;font:inherit;background:var(--grey)}
+table{width:100%;border-collapse:collapse}
+th{background:var(--navy);color:#fff;font-size:11.5px;text-align:left;padding:6px 7px}
+td{border:1px solid var(--line);padding:5px 7px;vertical-align:middle}
+tr.sec td{background:var(--navy);color:#fff;font-weight:700;padding:6px 7px;border-color:var(--navy)}
+td.no{width:30px;text-align:center;color:#666}
+td.how{color:#444;font-size:12px;width:34%}
+td.res{width:88px}
+td select,td input{width:100%;border:1px solid transparent;background:var(--grey);padding:4px 5px;font:inherit;font-size:12px}
+select.result.pass{background:#DFF2E1;color:#1E6B2E;font-weight:700}
+select.result.fail{background:#FBE0E0;color:#A12121;font-weight:700}
+select.result.na{background:#ECECEC;color:#555;font-weight:700}
+.outcome{margin-top:18px}
+.outcome h3,.sign h3{background:var(--teal);color:#fff;margin:0;padding:7px 9px;font-size:13px}
+.og{display:grid;grid-template-columns:200px 1fr;border:1px solid var(--line);border-top:0}
+.og div{padding:6px 8px;border-top:1px solid var(--line)}
+.og div:nth-child(-n+2){border-top:0}
+.og .k{background:var(--grey);font-weight:700}
+.og input,.og select,.og textarea{width:100%;border:1px solid var(--line);padding:5px;font:inherit}
+.og textarea{min-height:52px;resize:vertical}
+.sign{margin-top:18px;break-inside:avoid}
+.ack{font-size:11.5px;color:#333;padding:8px 2px;line-height:1.45}
+.sigs{display:grid;grid-template-columns:repeat(2,1fr);gap:40px;margin-top:6px}
+.sig-cap{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.4px}
+.sig-box{height:78px;border:1.5px dashed var(--teal);border-radius:6px;margin-top:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;background:#FAFCFD}
+.sig-box:hover{background:#EEF6F8}
+.sig-box img{max-height:72px;max-width:96%;display:none}
+.sig-box.signed{border-style:solid;border-color:transparent;background:#fff}
+.sig-box.signed img{display:block}.sig-box.signed .sig-hint{display:none}
+.sig-hint{color:var(--teal);font-size:12px}
+.sig-line{border-top:1px solid #333}
+.sig input.sigf{width:100%;border:0;border-bottom:1px dotted #aaa;padding:4px 0;font:inherit;font-weight:700;text-align:center}
+.sig-role{text-align:center;font-size:11px;color:#555}
+.sig-date{display:flex;gap:6px;align-items:center;margin-top:4px;font-size:11px}
+.sig-date input{text-align:left!important;font-weight:400!important}
+.link{background:none;border:0;color:#A12121;font-size:11px;cursor:pointer;padding:2px 0;display:none}
+.sig.has .link{display:inline}
+.foot{margin-top:16px;font-size:10px;color:#777;display:flex;justify-content:space-between}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(10,25,40,.55);display:none;align-items:center;justify-content:center;z-index:50}
+.modal.open{display:flex}
+.mbox{background:#fff;border-radius:10px;width:min(640px,94vw);padding:18px 20px}
+.mbox h4{margin:0 0 10px;color:var(--navy);font-size:16px}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tabs button{flex:1;padding:8px;border:1px solid var(--line);background:var(--grey);cursor:pointer;border-radius:6px;font-weight:600}
+.tabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+canvas#pad{width:100%;height:200px;border:1.5px solid var(--line);border-radius:6px;touch-action:none;background:#fff;cursor:crosshair}
+.drop{border:2px dashed var(--teal);border-radius:8px;height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#444;text-align:center;padding:10px}
+.drop img{max-height:120px;max-width:90%}
+.mact{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.mact .sp{margin-left:auto}
+.mbox .btn{border:1px solid var(--line)}
+.mbox .btn.pri{background:var(--teal);color:#fff;border-color:var(--teal)}
+.hint{font-size:11.5px;color:#666;margin-top:6px}
+body.locked .it{pointer-events:none}
+.lockbadge{display:none;background:#FFF4D6;color:#7A5800;font-size:12px;padding:8px 18px;text-align:center}
+body.locked .lockbadge{display:block}
+@page{size:A4;margin:12mm}
+@media print{
+  body{background:#fff;font-size:10.5px}
+  .noprint,.toolbar,.modal,.lockbadge,.link{display:none!important}
+  .page{box-shadow:none;margin:0;max-width:none;padding:0}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  select,input,textarea{appearance:none;-webkit-appearance:none;border-color:transparent!important;background:transparent!important}
+  select.result.pass,select.result.fail,select.result.na{background:transparent!important}
+  td{padding:3px 6px}
+  tr{break-inside:avoid}
+  .sig-box{border:0!important;background:#fff!important}
+  .og textarea{resize:none}
+  .title{font-size:16px;padding:8px}
+  ::placeholder{color:transparent!important}
+  input[type=date]::-webkit-calendar-picker-indicator{display:none}
+  input.blank{color:transparent!important}
+  .outcome,.og{break-inside:avoid}
+}
+</style></head>
+<body>
+<div class="toolbar noprint">
+  <span class="t">A04 · Home Workspace Inspection</span>
+  <label title="When checked, the saved copy locks the IT-filled checklist so the employee can only sign"><input type="checkbox" id="lockOnSave"> Lock checklist in saved copy</label>
+  <button type="button" id="saveBtn">Save filled copy (.html)</button>
+  <button type="button" class="pri" id="pdfBtn">Export to PDF</button>
+</div>
+<div class="lockbadge noprint">The checklist was completed and locked by IT. Please review, then click your signature box to sign and use <b>Export to PDF</b>.</div>
+
+<div class="page">
+  <div class="title">HOME WORKSPACE INSPECTION CHECKLIST</div>
+  <div class="sub">Pinnacle Intelligence · Remote Work Program · A04 · v1.0 · One form per employee</div>
+  <div class="hgrid"><div class="hf"><label>Employee Full Name</label><input class="it" type="text" data-k="emp_name"></div><div class="hf"><label>Employee ID</label><input class="it" type="text" data-k="emp_id"></div><div class="hf"><label>Role / Title</label><input class="it" type="text" data-k="role"></div><div class="hf"><label>Approved Remote Address</label><input class="it" type="text" data-k="address"></div><div class="hf"><label>Inspection Date</label><input class="it" type="date" data-k="audit_date"></div><div class="hf"><label>Inspection Type</label><select class="it" data-k="audit_type"><option value=""></option><option>Pre-Activation</option><option>Annual Renewal</option><option>Re-inspection</option></select></div></div>
+  <table>
+    <thead><tr><th>#</th><th>Audit Item</th><th>Standard / Guidance</th><th>Result</th><th>Notes / Evidence</th></tr></thead>
+    <tbody><tr class="sec"><td colspan="5">1. DEDICATED &amp; PRIVATE WORKSPACE</td></tr><tr><td class="no">1</td><td>Separate enclosed area — not a common living area</td><td class="how">Dedicated room or partitioned area. Sofas/dining tables do not qualify.</td>
+<td class="res"><select class="it result" data-k="r1"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n1" placeholder=""></td></tr><tr><td class="no">2</td><td>Can be locked or secured to prevent unauthorized entry</td><td class="how">Door with lock preferred. Document compensating control if none.</td>
+<td class="res"><select class="it result" data-k="r2"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n2" placeholder=""></td></tr><tr><td class="no">3</td><td>Household members cannot view work screen during work hours</td><td class="how">Physical line of sight to screen blocked from common areas.</td>
+<td class="res"><select class="it result" data-k="r3"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n3" placeholder=""></td></tr><tr><td class="no">4</td><td>Used exclusively for work during scheduled hours</td><td class="how">No shared use with household members during work hours.</td>
+<td class="res"><select class="it result" data-k="r4"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n4" placeholder=""></td></tr><tr class="sec"><td colspan="5">2. DESK, CHAIR &amp; ERGONOMICS</td></tr><tr><td class="no">5</td><td>Dedicated desk or flat work surface present</td><td class="how">Stable surface adequate for device + peripherals. Not a bed or sofa.</td>
+<td class="res"><select class="it result" data-k="r5"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n5" placeholder=""></td></tr><tr><td class="no">6</td><td>Ergonomic seating available</td><td class="how">Chair with back support. Not a stool or floor cushion.</td>
+<td class="res"><select class="it result" data-k="r6"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n6" placeholder=""></td></tr><tr><td class="no">7</td><td>Monitor or laptop screen at approximately eye level</td><td class="how">Top of screen at or slightly below eye level.</td>
+<td class="res"><select class="it result" data-k="r7"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n7" placeholder=""></td></tr><tr><td class="no">8</td><td>Keyboard and mouse allow neutral wrist posture</td><td class="how">Arms parallel to floor, wrists straight.</td>
+<td class="res"><select class="it result" data-k="r8"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n8" placeholder=""></td></tr><tr><td class="no">9</td><td>No significant clutter obstructing workspace</td><td class="how">Clear working surface. No fire hazards near power strips.</td>
+<td class="res"><select class="it result" data-k="r9"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n9" placeholder=""></td></tr><tr class="sec"><td colspan="5">3. LIGHTING</td></tr><tr><td class="no">10</td><td>Adequate lighting in workspace</td><td class="how">Natural or artificial light clearly illuminates work surface.</td>
+<td class="res"><select class="it result" data-k="r10"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n10" placeholder=""></td></tr><tr><td class="no">11</td><td>No glare on screen or camera from light source</td><td class="how">Light source beside or behind screen, not behind employee.</td>
+<td class="res"><select class="it result" data-k="r11"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n11" placeholder=""></td></tr><tr><td class="no">12</td><td>Employee clearly visible on webcam under existing lighting</td><td class="how">Test webcam during inspection. Face must be clearly lit.</td>
+<td class="res"><select class="it result" data-k="r12"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n12" placeholder=""></td></tr><tr class="sec"><td colspan="5">4. NOISE ENVIRONMENT</td></tr><tr><td class="no">13</td><td>Ambient noise acceptable for voice work</td><td class="how">Background noise must not interfere with call quality.</td>
+<td class="res"><select class="it result" data-k="r13"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n13" placeholder=""></td></tr><tr><td class="no">14</td><td>Noise-cancelling headset available and functional</td><td class="how">Company-issued or employee-owned NC headset. Audio tested.</td>
+<td class="res"><select class="it result" data-k="r14"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n14" placeholder=""></td></tr><tr><td class="no">15</td><td>Household noise sources controlled during work hours</td><td class="how">TV, children, pets. Employee declaration + noise test.</td>
+<td class="res"><select class="it result" data-k="r15"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n15" placeholder=""></td></tr><tr><td class="no">16</td><td>No significant external noise intrusion during test</td><td class="how">Assessed during inspection. Note intermittent issues.</td>
+<td class="res"><select class="it result" data-k="r16"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n16" placeholder=""></td></tr><tr class="sec"><td colspan="5">5. POWER &amp; ELECTRICAL</td></tr><tr><td class="no">17</td><td>UPS unit present and connected (mandatory for BDC/voice)</td><td class="how">Minimum 650VA. Record model and VA rating in notes.</td>
+<td class="res"><select class="it result" data-k="r17"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n17" placeholder=""></td></tr><tr><td class="no">18</td><td>UPS battery tested — minimum 15 min backup</td><td class="how">Battery test or purchase within 6 months.</td>
+<td class="res"><select class="it result" data-k="r18"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n18" placeholder=""></td></tr><tr><td class="no">19</td><td>No overloaded power strips or daisy-chained extensions</td><td class="how">Max 3 devices per strip.</td>
+<td class="res"><select class="it result" data-k="r19"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n19" placeholder=""></td></tr><tr><td class="no">20</td><td>Surge protector in use for work equipment</td><td class="how">Surge protector or UPS covers all work devices.</td>
+<td class="res"><select class="it result" data-k="r20"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n20" placeholder=""></td></tr><tr class="sec"><td colspan="5">6. NETWORK EQUIPMENT</td></tr><tr><td class="no">21</td><td>Home Wi-Fi router confirmed as personal/household router</td><td class="how">Not a shared or public connection.</td>
+<td class="res"><select class="it result" data-k="r21"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n21" placeholder=""></td></tr><tr><td class="no">22</td><td>Work device connected via wired ethernet or stable Wi-Fi</td><td class="how">Ethernet preferred. Note if Wi-Fi only.</td>
+<td class="res"><select class="it result" data-k="r22"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n22" placeholder=""></td></tr><tr><td class="no">23</td><td>Signal strength acceptable at workstation</td><td class="how">Minimum 3 bars / -70 dBm.</td>
+<td class="res"><select class="it result" data-k="r23"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n23" placeholder=""></td></tr><tr class="sec"><td colspan="5">7. SCREEN PRIVACY</td></tr><tr><td class="no">24</td><td>Screen privacy filter installed on work monitor</td><td class="how">Physical filter covering full screen. Black from side.</td>
+<td class="res"><select class="it result" data-k="r24"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n24" placeholder=""></td></tr><tr><td class="no">25</td><td>Laptop screen not visible to household members</td><td class="how">Camera test or placement confirms side/rear obscured.</td>
+<td class="res"><select class="it result" data-k="r25"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n25" placeholder=""></td></tr><tr class="sec"><td colspan="5">8. EQUIPMENT CONDITION</td></tr><tr><td class="no">26</td><td>All company-issued equipment present and in good condition</td><td class="how">Cross-check against IT Asset Register.</td>
+<td class="res"><select class="it result" data-k="r26"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n26" placeholder=""></td></tr><tr><td class="no">27</td><td>No visible damage to devices, cables, or peripherals</td><td class="how">Physical inspection.</td>
+<td class="res"><select class="it result" data-k="r27"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n27" placeholder=""></td></tr><tr><td class="no">28</td><td>Serial numbers match IT Asset Register records</td><td class="how">Cross-reference serial on device with asset record.</td>
+<td class="res"><select class="it result" data-k="r28"><option value=""></option><option>Pass</option><option>Fail</option><option>N/A</option></select></td>
+<td><input class="it" type="text" data-k="n28" placeholder=""></td></tr></tbody>
+  </table>
+
+  <div class="outcome">
+    <h3>INSPECTION OUTCOME</h3>
+    <div class="og">
+      <div class="k">Overall Result</div><div><select class="it" data-k="outcome"><option value=""></option><option>PASSED</option><option>CONDITIONAL</option><option>FAILED</option></select></div>
+      <div class="k">Items Requiring Remediation</div><div><textarea class="it" data-k="outstanding"></textarea></div>
+      <div class="k">Remediation Deadline</div><div><input class="it" type="date" data-k="deadline"></div>
+      <div class="k">Re-inspection Required?</div><div><select class="it" data-k="reinspect"><option value=""></option><option>Yes</option><option>No</option></select></div>
+    </div>
+  </div>
+
+  <div class="sign">
+    <h3>SIGN-OFF</h3>
+    <div class="ack">By signing below, the employee acknowledges that the home workspace inspection above was conducted on the stated date, that the results were explained, and that any items requiring remediation will be addressed by the deadline indicated. The IT Reviewer approves the inspection results.</div>
+    <div class="sigs"><div class="sig" id="sig-employee">
+  <div class="sig-cap">Acknowledged by</div>
+  <div class="sig-box" data-signer="employee" tabindex="0" title="Click to sign">
+    <img alt="" class="sig-img"><span class="sig-hint noprint">Click to sign — draw or upload</span>
+  </div>
+  <div class="sig-line"></div>
+  <input class="sigf" type="text" data-k="employee_name" placeholder="Printed name">
+  <div class="sig-role">Employee</div>
+  <div class="sig-date"><label>Date</label><input class="sigf" type="date" data-k="employee_date"></div>
+  <button type="button" class="link noprint clear-sig" data-signer="employee">Remove signature</button>
+</div><div class="sig" id="sig-auditor">
+  <div class="sig-cap">Inspected &amp; approved by</div>
+  <div class="sig-box" data-signer="auditor" tabindex="0" title="Click to sign">
+    <img alt="" class="sig-img"><span class="sig-hint noprint">Click to sign — draw or upload</span>
+  </div>
+  <div class="sig-line"></div>
+  <input class="sigf" type="text" data-k="auditor_name" placeholder="Printed name">
+  <div class="sig-role">IT Reviewer</div>
+  <div class="sig-date"><label>Date</label><input class="sigf" type="date" data-k="auditor_date"></div>
+  <button type="button" class="link noprint clear-sig" data-signer="auditor">Remove signature</button>
+</div></div>
+  </div>
+  <div class="foot"><span>A04 Home Workspace Inspection Checklist · v1.0</span><span>Confidential — Internal Use</span></div>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="mbox">
+    <h4 id="mTitle">Add signature</h4>
+    <div class="tabs"><button type="button" class="on" data-tab="draw">Draw with mouse / finger</button><button type="button" data-tab="upload">Upload signature image</button></div>
+    <div id="tab-draw">
+      <canvas id="pad"></canvas>
+      <div class="hint">Sign inside the box. You can also download your drawn signature as a PNG to reuse later.</div>
+    </div>
+    <div id="tab-upload" style="display:none">
+      <label class="drop" id="drop"><span id="dropTxt">Click to choose, or drag &amp; drop a PNG/JPG of your signature<br><small>Tip: a transparent PNG or a photo on white paper works best</small></span><img id="upPrev" alt="" style="display:none"><input type="file" id="file" accept="image/png,image/jpeg,image/webp" hidden></label>
+    </div>
+    <div class="mact">
+      <button type="button" class="btn" id="clearPad">Clear</button>
+      <button type="button" class="btn" id="dlPad">Download PNG</button>
+      <span class="sp"></span>
+      <button type="button" class="btn" id="cancel">Cancel</button>
+      <button type="button" class="btn pri" id="apply">Apply signature</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+  // result colouring
+  function paint(s){s.classList.remove('pass','fail','na');const v=s.value;if(v==='Pass')s.classList.add('pass');else if(v==='Fail')s.classList.add('fail');else if(v==='N/A')s.classList.add('na');}
+  $$('select.result').forEach(s=>{paint(s);s.addEventListener('change',()=>paint(s));});
+  if(document.body.dataset.locked==='1'){document.body.classList.add('locked');$$('.it').forEach(el=>{el.setAttribute('tabindex','-1');el.readOnly=true;});}
+  $$('.sig').forEach(s=>{const img=s.querySelector('img');if(img.getAttribute('src')){s.classList.add('has');s.querySelector('.sig-box').classList.add('signed');}});
+
+  // modal + pad
+  const modal=$('#modal'),pad=$('#pad'),ctx=pad.getContext('2d');let current=null,tab='draw',drawn=false,upData=null;
+  function sizePad(){const r=pad.getBoundingClientRect(),d=window.devicePixelRatio||1;pad.width=r.width*d;pad.height=r.height*d;ctx.setTransform(d,0,0,d,0,0);ctx.lineWidth=2.4;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#0B1F3A';drawn=false;}
+  function setTab(t){tab=t;$$('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));$('#tab-draw').style.display=t==='draw'?'':'none';$('#tab-upload').style.display=t==='upload'?'':'none';$('#dlPad').style.display=t==='draw'?'':'none';}
+  $$('.tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+  function open(k){current=k;const cap=document.querySelector('#sig-'+k+' .sig-role').textContent;$('#mTitle').textContent='Signature — '+cap;modal.classList.add('open');setTab('draw');sizePad();upData=null;$('#upPrev').style.display='none';$('#dropTxt').style.display='';$('#file').value='';}
+  $$('.sig-box').forEach(b=>{b.onclick=()=>open(b.dataset.signer);b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open(b.dataset.signer);}};});
+  let down=false,last=null;
+  const pos=e=>{const r=pad.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};};
+  pad.addEventListener('pointerdown',e=>{down=true;last=pos(e);pad.setPointerCapture(e.pointerId);ctx.beginPath();ctx.arc(last.x,last.y,1.1,0,7);ctx.fillStyle='#0B1F3A';ctx.fill();drawn=true;});
+  pad.addEventListener('pointermove',e=>{if(!down)return;const p=pos(e);ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p;drawn=true;});
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>pad.addEventListener(ev,()=>down=false));
+  $('#clearPad').onclick=()=>{if(tab==='draw')sizePad();else{upData=null;$('#upPrev').style.display='none';$('#dropTxt').style.display='';$('#file').value='';}};
+  function trimmed(){ // crop transparent margins
+    const w=pad.width,h=pad.height,d=ctx.getImageData(0,0,w,h).data;let x0=w,y0=h,x1=0,y1=0;
+    for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(d[(y*w+x)*4+3]>0){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}
+    if(x1<x0)return null;const p=8,c=document.createElement('canvas');x0=Math.max(0,x0-p);y0=Math.max(0,y0-p);x1=Math.min(w,x1+p);y1=Math.min(h,y1+p);
+    c.width=x1-x0;c.height=y1-y0;c.getContext('2d').drawImage(pad,x0,y0,c.width,c.height,0,0,c.width,c.height);return c.toDataURL('image/png');}
+  $('#dlPad').onclick=()=>{const u=drawn&&trimmed();if(!u){alertBox('Draw your signature first.');return;}const a=document.createElement('a');a.href=u;a.download='signature.png';a.click();};
+  function loadFile(f){if(!f||!/^image\//.test(f.type)){alertBox('Please choose a PNG or JPG image.');return;}const r=new FileReader();r.onload=()=>{
+      // downscale large images to keep the saved file small
+      const im=new Image();im.onload=()=>{const m=600,s=Math.min(1,m/im.width);const c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);upData=c.toDataURL('image/png');$('#upPrev').src=upData;$('#upPrev').style.display='';$('#dropTxt').style.display='none';};im.src=r.result;};r.readAsDataURL(f);}
+  $('#file').onchange=e=>loadFile(e.target.files[0]);
+  const drop=$('#drop');['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();}));drop.addEventListener('drop',e=>{e.preventDefault();loadFile(e.dataTransfer.files[0]);});
+  $('#cancel').onclick=()=>modal.classList.remove('open');
+  $('#apply').onclick=()=>{let u=null;if(tab==='draw'){u=drawn&&trimmed();if(!u){alertBox('Draw your signature first.');return;}}else{u=upData;if(!u){alertBox('Choose a signature image first.');return;}}
+    const s=document.getElementById('sig-'+current);s.querySelector('img').src=u;s.classList.add('has');s.querySelector('.sig-box').classList.add('signed');
+    const dt=s.querySelector('input[type=date]');if(!dt.value)dt.value=new Date().toLocaleDateString('en-CA');
+    if(current==='employee'){const n=s.querySelector('input[type=text]');const en=document.querySelector('[data-k=emp_name]').value;if(!n.value&&en)n.value=en;}
+    modal.classList.remove('open');};
+  $$('.clear-sig').forEach(b=>b.onclick=()=>{const s=document.getElementById('sig-'+b.dataset.signer);s.querySelector('img').removeAttribute('src');s.classList.remove('has');s.querySelector('.sig-box').classList.remove('signed');});
+  function alertBox(m){const h=document.querySelector('.hint');const o=h.textContent;h.textContent=m;h.style.color='#A12121';const dh=document.querySelector('#dropTxt');setTimeout(()=>{h.textContent=o;h.style.color='';},2200);if(tab==='upload'){dh.style.display='';}}
+
+  // hide empty date placeholders in print
+  window.addEventListener('beforeprint',()=>$$('input[type=date]').forEach(i=>i.classList.toggle('blank',!i.value)));
+  window.addEventListener('afterprint',()=>$$('input.blank').forEach(i=>i.classList.remove('blank')));
+  // export
+  $('#pdfBtn').onclick=()=>{const n=document.querySelector('[data-k=emp_name]').value.trim(),id=document.querySelector('[data-k=emp_id]').value.trim();const old=document.title;document.title='A04_Workspace_Inspection_'+(id||'EMP')+'_'+(n||'Employee').replace(/[^A-Za-z0-9]+/g,'_');window.print();setTimeout(()=>document.title=old,500);};
+  // save a copy with current values baked in
+  $('#saveBtn').onclick=()=>{
+    $$('input').forEach(i=>{if(i.type==='checkbox'){i.checked?i.setAttribute('checked',''):i.removeAttribute('checked');}else if(i.type!=='file')i.setAttribute('value',i.value);});
+    $$('textarea').forEach(t=>t.textContent=t.value);
+    $$('select').forEach(s=>Array.from(s.options).forEach(o=>o.selected?o.setAttribute('selected',''):o.removeAttribute('selected')));
+    const clone=document.documentElement.cloneNode(true);const b=clone.querySelector('body');
+    if($('#lockOnSave').checked)b.setAttribute('data-locked','1');
+    b.classList.remove('locked');clone.querySelector('#modal').classList.remove('open');
+    const html='<!DOCTYPE html>\n'+clone.outerHTML;
+    const id=document.querySelector('[data-k=emp_id]').value.trim()||'EMP',n=document.querySelector('[data-k=emp_name]').value.trim()||'Employee';
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='A04_Workspace_Inspection_'+id+'_'+n.replace(/[^A-Za-z0-9]+/g,'_')+'.html';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);};
+})();
+</script>
+</body></html>
